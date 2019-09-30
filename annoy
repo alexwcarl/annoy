@@ -1,0 +1,21 @@
+#!/usr/bin/env python
+
+import os
+import sys
+import time
+import requests as r
+
+
+url = sys.argv[1]
+
+
+def request(url, delay, status):
+	response = r.get(url = url)
+	print "Status code: " + str(response.status_code)
+	while response.status_code != status:
+		time.sleep(delay)
+		print "Retrying..."
+		continue
+	print "It's available!"
+
+request(url, 30, 200)
