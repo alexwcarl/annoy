@@ -15,6 +15,7 @@ def request(url, delay, status):
 	while response.status_code != status:
 		time.sleep(delay)
 		print "Retrying..."
+		response = r.get(url = url)
 		continue
 	print "It's available!"
 
