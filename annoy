@@ -7,16 +7,21 @@ import requests as r
 
 
 url = sys.argv[1]
+user_agent = 'annoy/0.1'
 
 
-def request(url, delay, status):
+def request(url):
 	response = r.get(url = url)
-	print "Status code: " + str(response.status_code)
-	while response.status_code != status:
+	return response.status_code
+
+def retry(url, delay, status):
+	status_code = request(url)
+	print "Status code: " + str(status_code)
+	while status_code != status:
 		time.sleep(delay)
 		print "Retrying..."
-		response = r.get(url = url)
+		status_code = request(url)
 		continue
 	print "It's available!"
 
-request(url, 30, 200)
+retry(url, 30, 200)
