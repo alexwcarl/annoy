@@ -12,11 +12,11 @@ parser.add_argument('--retry', type=int, default=30, help='retry interval in sec
 parser.add_argument('--status', type=int, default=200, help='status code')
 arguments = parser.parse_args()
 
-user_agent = 'annoy/0.2'
 
 
 def request(url):
-	response = r.get(url = url)
+	headers = {'User-Agent':'annoy/0.2'}
+	response = r.get(url = url, headers = headers)
 	return response.status_code
 
 def retry(url, delay, status):
@@ -29,4 +29,7 @@ def retry(url, delay, status):
 		continue
 	print "It's available!"
 
-retry(arguments.url, arguments.retry, arguments.status)
+try:
+	retry(arguments.url, arguments.retry, arguments.status)
+except KeyboardInterrupt:
+	sys.exit()
