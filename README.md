@@ -1,8 +1,8 @@
 # annoy
-Sends an HTTP request to a URL until you get the status code you want. The defaults are 30 second retries and a 200 status code. Will make these configurable from the command line soon™ 
+Sends an HTTP request until you get the status code you want. The defaults are 30 second retries and a 200 status code.
 
 ## Usage
 
 ```
-annoy protocol://path
+annoy protocol://url --retry RETRY_INTERVAL --status STATUS_CODE 
 ```
