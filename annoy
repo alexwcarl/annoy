@@ -1,13 +1,18 @@
 #!/usr/bin/env python
 
+import argparse
 import os
 import sys
 import time
 import requests as r
 
+parser = argparse.ArgumentParser(description='Sends an HTTP request until you get the status code you want')
+parser.add_argument('url', type=str, help='URL to retry')
+parser.add_argument('--timeout', type=int, default=30, help='Timeout in seconds')
+parser.add_argument('--status', type=int, default=200, help='Status code')
+arguments = parser.parse_args()
 
-url = sys.argv[1]
-user_agent = 'annoy/0.1'
+user_agent = 'annoy/0.2'
 
 
 def request(url):
@@ -24,4 +29,4 @@ def retry(url, delay, status):
 		continue
 	print "It's available!"
 
-retry(url, 30, 200)
+retry(arguments.url, arguments.timeout, arguments.status)
