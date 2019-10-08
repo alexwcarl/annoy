@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 
 import argparse
-import os
-import sys
 import time
 import requests as r
+import signal as s
+import sys
+
 
 parser = argparse.ArgumentParser(description='Sends an HTTP request until you get the status code you want')
 parser.add_argument('url', type=str, help='URL to retry')
@@ -13,13 +14,16 @@ parser.add_argument('--status', type=int, default=200, help='status code')
 arguments = parser.parse_args()
 
 
+def graceful_exit(sig, frame):
+	sys.exit(0)
 
 def request(url):
 	headers = {'User-Agent':'annoy/0.2'}
-	response = r.get(url = url, headers = headers)
+	response = r.get(url=url, headers=headers)
 	return response.status_code
 
 def retry(url, delay, status):
+	s.signal(s.SIGINT, graceful_exit)
 	status_code = request(url)
 	print "Status code: " + str(status_code)
 	while status_code != status:
@@ -28,8 +32,7 @@ def retry(url, delay, status):
 		status_code = request(url)
 		continue
 	print "It's available!"
+	sys.exit(0)
 
-try:
-	retry(arguments.url, arguments.retry, arguments.status)
-except KeyboardInterrupt:
-	sys.exit()
+
+retry(arguments.url, arguments.retry, arguments.status)
